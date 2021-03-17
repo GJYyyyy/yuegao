@@ -1,0 +1,1 @@
+#home .menu-item{color:var(--ft-color);cursor:pointer;padding:0 16px}#home .menu-item.active,#home .menu-item:hover{background-color:var(--bg-color2)}#home .el-submenu__title{border-bottom:1px solid var(--border-color2)!important}#home .el-submenu__icon-arrow{display:none}
