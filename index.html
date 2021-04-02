@@ -10,6 +10,10 @@
             margin: 0;
             padding: 20px 16px 12px;
         }
+        h2 {
+            margin: 0;
+            font-weight: 400;
+        }
 
         .article {
             display: none;
@@ -29,37 +33,38 @@
 <body>
     <div class="article">
         <h2 style="font-size:22px;color:#333;margin-bottom:14px;">——</h2>
-        <div>
-            <!-- 可能会有一些描述，比如作者、日期…… -->
+        <div style="margin-bottom:22px;font-size:15px;">
+            <span class="author" style="color:#666;margin-right:8px;"></span>
+            <span class="date" style="color:#999;"></span>
         </div>
         <div class="full-text-area"></div>
     </div>
     <p class="article-load-err-msg"></p>
 
     <!-- 引入JQuery CDN -->
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
 
         (()=>{
-            let $articleContainer = $('.article');
-            let $errMsg = $('.article-load-err-msg');
 
             // 判断JQuery加载成功否
             if(!$) {
                 $articleContainer.hide();
                 $errMsg.text('JQuery 加载失败！').show();
-                return false;
+                return;
             }
+
+            let $articleContainer = $('.article');
+            let $errMsg = $('.article-load-err-msg');
 
 
             // 请求文章数据
             let id = location.search.substr(1).split('&').find(v=>/id=/.test(v)).split('=')[1];
-            id = '2936904c92d011eba1fc00163e046787';
             if(!id) {
                 $articleContainer.hide();
-                $errMs.text('该文章不存在！').show();
+                $errMsg.text('该文章不存在！').show();
+                return;
             }
-
             $.get({
                 url: 'http://posapp.china-mail.com.cn/web/api/frame/cmsText//view/' + id,
                 success,
@@ -73,7 +78,10 @@
             */
             function success(res){
                 if(res.code === 0){
-                    $articleContainer.children('.full-text-area').html(res.data);
+                    $articleContainer.children('.full-text-area').html(res.data.tMsg);
+                    $articleContainer.children('h2').text(res.data.tTitle);
+                    $articleContainer.find('.author').text(res.data.tAuthor);
+                    $articleContainer.find('.date').text(res.data.createTime);
                     $articleContainer.show();
                 }else{
                     $errMsg.text(res.msg).show();
